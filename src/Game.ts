@@ -1,21 +1,24 @@
 import { Vector2 } from "pixi-spine";
 import * as PIXI from "pixi.js";
 import { Application } from "pixi.js";
-
+import Victor from "victor";
 export default class Game {
     //static Instance: Game;
     app: Application;
     square: PIXI.Sprite;
     enemy: PIXI.Graphics;
+    enemySpeed: number;
 
     constructor(app: Application) {
         //Game.Instance = this;
         this.app = app;
         this.square = new PIXI.Sprite(PIXI.Texture.WHITE);
         this.enemy = new PIXI.Graphics();
+        this.enemySpeed = 2;
         this.addSquare();
         this.app.ticker.add((delta) => {
             this.mouseRotation();
+            this.moveEnemies();
         });
         this.spwanEnemies();
     }
@@ -65,5 +68,18 @@ export default class Game {
         let angle =
             Math.atan2(cursorPos.y - this.square.position.y, cursorPos.x - this.square.position.x) + Math.PI / 2;
         this.square.rotation = angle;
+    }
+
+    moveEnemies(): void {
+        let e = new Victor(this.enemy.position.x, this.enemy.position.y);
+        let s = new Victor(this.square.position.x, this.square.position.y);
+        if (e.distance(s) < this.square.width / 2) {
+            let r = this.randomSpawPoint();
+            this.enemy.position.set(r.x, r.y);
+            return;
+        }
+        let d = s.subtract(e);
+        let v = d.normalize().multiplyScalar(this.enemySpeed);
+        this.enemy.position.set(this.enemy.position.x + v.x, this.enemy.position.y + v.y);
     }
 }
