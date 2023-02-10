@@ -12,11 +12,12 @@ export default class Enemy {
         this.app = app;
         this.player = player;
         this.enemyGraphics = new PIXI.Graphics();
-        this.enemySpeed = 2;
+        this.enemySpeed = 1;
+        this.spawnEnemies();
     }
 
-    spwanEnemies(): void {
-        let r = this.randomSpawPoint();
+    spawnEnemies(): void {
+        let r = this.randomSpawnPoint();
         let enemyRad = 16;
         this.enemyGraphics.position.set(r.x, r.y);
         this.enemyGraphics.beginFill(0xff0000, 1);
@@ -25,7 +26,7 @@ export default class Enemy {
         this.app.stage.addChild(this.enemyGraphics);
     }
 
-    randomSpawPoint(): Victor {
+    randomSpawnPoint(): Victor {
         let edge = Math.floor(Math.random() * 4);
         let spawnPoint = new Victor(0, 0);
         switch (edge) {
@@ -52,7 +53,7 @@ export default class Enemy {
         let e = new Victor(this.enemyGraphics.position.x, this.enemyGraphics.position.y);
         let s = new Victor(this.player.playerSprite.position.x, this.player.playerSprite.position.y);
         if (e.distance(s) < this.player.playerSprite.width / 2) {
-            let r = this.randomSpawPoint();
+            let r = this.randomSpawnPoint();
             this.enemyGraphics.position.set(r.x, r.y);
             return;
         }
