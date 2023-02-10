@@ -21,6 +21,17 @@ export default class Shooting {
     }
 
     fire(): void {
+        if (this.bullets.length >= this.maxBullet) {
+            let b = this.bullets.shift(); // Take the oldest bullet in array
+            this.app.stage.removeChild(b);
+        }
+
+        this.bullets.forEach((b) => this.app.stage.removeChild(b));
+        this.bullets = this.bullets.filter(
+            (b) => Math.abs(b.position.x) < this.app.screen.width && Math.abs(b.position.y) < this.app.screen.height,
+        );
+
+        this.bullets.forEach((b) => this.app.stage.addChild(b));
         const bullet = new PIXI.Graphics();
         bullet.position.set(this.player.playerSprite.position.x, this.player.playerSprite.position.y);
         bullet.beginFill(0x0000ff, 1);
