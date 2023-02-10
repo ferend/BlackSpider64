@@ -20,7 +20,20 @@ export default class Shooting {
         this.bullets = [];
     }
 
-    fire(): void {
+    set shoot(shooting: any) {
+        if (shooting) {
+            this.generateBullet();
+            this.interval = setInterval(() => this.generateBullet(), 500);
+        } else {
+            clearInterval(this.interval);
+        }
+    }
+
+    shootBullets(): void {
+        this.bullets.forEach((b) => b.position.set(b.position.x + b.velocity.x, b.position.y + b.velocity.y));
+    }
+
+    generateBullet(): void {
         if (this.bullets.length >= this.maxBullet) {
             let b = this.bullets.shift(); // Take the oldest bullet in array
             this.app.stage.removeChild(b);
@@ -41,18 +54,5 @@ export default class Shooting {
         bullet.velocity = new Victor(Math.cos(angle), Math.sin(angle)).multiplyScalar(this.bulletSpeed);
         this.bullets.push(bullet);
         this.app.stage.addChild(bullet);
-    }
-
-    set shoot(shooting: any) {
-        if (shooting) {
-            this.fire();
-            this.interval = setInterval(() => this.fire(), 500);
-        } else {
-            clearInterval(this.interval);
-        }
-    }
-
-    update(): void {
-        this.bullets.forEach((b) => b.position.set(b.position.x + b.velocity.x, b.position.y + b.velocity.y));
     }
 }

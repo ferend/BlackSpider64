@@ -22,9 +22,25 @@ export default class Game {
 
         this.player.addPlayer();
         this.app.ticker.add((delta) => {
-            this.player.playerRotation();
+            this.player.playerMouseEvents();
             this.spawner.spawns.forEach(function (value) {
                 value.moveEnemies();
+            });
+            this.bulletHit(this.player.shooting.bullets, this.spawner.spawns, 8, 16);
+        });
+    }
+
+    bulletHit(bullets: Array<any>, enemies: Array<Enemy>, bulletRadius: number, enemyRadius: number): void {
+        bullets.forEach((bullet) => {
+            enemies.forEach((enemy, index) => {
+                let distanceX = enemy.enemyGraphics.position.x - bullet.position.x;
+                let distanceY = enemy.enemyGraphics.position.y - bullet.position.y;
+                let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                if (distance < bulletRadius + enemyRadius) {
+                    // Add to radiuses to calculate interference and distance
+                    enemies.splice(index, 1);
+                    enemy.kill();
+                }
             });
         });
     }

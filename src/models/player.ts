@@ -21,18 +21,25 @@ export default class Player {
         this.app.stage.addChild(this.playerSprite);
     }
 
-    playerRotation(): void {
+    playerMouseEvents(): void {
         const mouse = this.app.renderer.plugins.interaction.mouse;
+        this.playerRotation(mouse);
+        this.playerShooting(mouse);
+    }
+
+    playerRotation(mouse: any): void {
         const cursorPos = mouse.global;
         let angle =
             Math.atan2(cursorPos.y - this.playerSprite.position.y, cursorPos.x - this.playerSprite.position.x) +
             Math.PI / 2;
         this.playerSprite.rotation = angle;
+    }
 
+    playerShooting(mouse: any): void {
         if (mouse.buttons !== this.lastMouseButton) {
             this.shooting.shoot = mouse.buttons !== 0;
             this.lastMouseButton = mouse.buttons;
         }
-        this.shooting.update();
+        this.shooting.shootBullets();
     }
 }

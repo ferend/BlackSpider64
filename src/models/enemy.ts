@@ -61,4 +61,12 @@ export default class Enemy {
         let v = d.normalize().multiplyScalar(this.enemySpeed);
         this.enemyGraphics.position.set(this.enemyGraphics.position.x + v.x, this.enemyGraphics.position.y + v.y);
     }
+
+    kill(): void {
+        this.app.stage.removeChild(this.enemyGraphics);
+    }
+
+    get position(): any {
+        return this.enemyGraphics.position;
+    }
 }
