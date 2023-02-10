@@ -1,13 +1,17 @@
 import * as PIXI from "pixi.js";
 import { Application } from "pixi.js";
+import Shooting from "../actions/shooting";
 
 export default class Player {
     app: Application;
     playerSprite: PIXI.Sprite;
-
+    shooting: Shooting;
+    lastMouseButton: number;
     constructor(app: Application) {
         this.app = app;
         this.playerSprite = new PIXI.Sprite(PIXI.Texture.WHITE);
+        this.shooting = new Shooting(app, this);
+        this.lastMouseButton = 0;
     }
 
     addPlayer(): void {
@@ -18,10 +22,17 @@ export default class Player {
     }
 
     playerRotation(): void {
-        const cursorPos = this.app.renderer.plugins.interaction.mouse.global;
+        const mouse = this.app.renderer.plugins.interaction.mouse;
+        const cursorPos = mouse.global;
         let angle =
             Math.atan2(cursorPos.y - this.playerSprite.position.y, cursorPos.x - this.playerSprite.position.x) +
             Math.PI / 2;
         this.playerSprite.rotation = angle;
+
+        if (mouse.buttons !== this.lastMouseButton) {
+            this.shooting.shoot = mouse.buttons !== 0;
+            this.lastMouseButton = mouse.buttons;
+        }
+        this.shooting.update();
     }
 }
