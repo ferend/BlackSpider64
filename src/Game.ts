@@ -18,10 +18,18 @@ export default class Game {
         this.app = app;
         this.player = new Player(app);
         //this.enemy = new Enemy(app, this.player);
-        this.spawner = new Spawner(() => new Enemy(app, this.player));
+        this.spawner = new Spawner(this.app,() => new Enemy(this.app, this.player));
 
         this.player.addPlayer();
+
+        let gameStartScene = this.createScene("Click to Start");
+        let gameOverScene = this.createScene("Game Over");
+        this.app.gameStarted = false;
+
         this.app.ticker.add((delta) => {
+            gameOverScene.visible = this.player.dead;
+            gameStartScene.visible = !this.app.gameStarted;
+            if(this.app.gameStarted === false) return;
             this.player.playerMouseEvents();
             this.spawner.spawns.forEach(function (value) {
                 value.moveEnemies();
@@ -44,4 +52,17 @@ export default class Game {
             });
         });
     }
+    createScene(sceneText: any): PIXI.Container {
+        const sceneContainer = new PIXI.Container();
+        const text = new PIXI.Text(sceneText);
+        text.style.fill = 0x00FF00;
+        text.x = this.app.screen.width / 2;
+        text.y = 0;
+        text.anchor.set(0.5,0);
+        sceneContainer.zIndex = 1;
+        sceneContainer.addChild(text);
+        this.app.stage.addChild(sceneContainer);
+        return sceneContainer;
+    }
+
 }

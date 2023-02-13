@@ -10,6 +10,7 @@ export default class Player {
     healthBar: PIXI.Graphics;
     playerMaxHealth: number;
     playerCurrentHealth: number;
+    dead: boolean;
     constructor(app: Application) {
         this.app = app;
         this.playerSprite = new PIXI.Sprite(PIXI.Texture.WHITE);
@@ -18,6 +19,7 @@ export default class Player {
         this.playerMaxHealth = 100;
         this.playerCurrentHealth = this.playerMaxHealth;
         this.lastMouseButton = 0;
+        this.dead = false;
         this.createPlayerHealthBar();
     }
 
@@ -29,6 +31,7 @@ export default class Player {
     }
 
     playerMouseEvents(): void {
+        if(this.dead === true) return;
         const mouse = this.app.renderer.plugins.interaction.mouse;
         this.playerRotation(mouse);
         this.playerShooting(mouse);
@@ -53,10 +56,12 @@ export default class Player {
         const margin = 16;
         const barHeight = 8;
         this.healthBar.beginFill(0xff0000);
+        // @ts-ignore
         this.healthBar.initialWidth = this.app.screen.width - 2 * margin;
         this.healthBar.drawRect(
             margin,
             this.app.screen.height - barHeight - margin / 2,
+            // @ts-ignore
             this.healthBar.initialWidth,
             barHeight,
         );
@@ -67,9 +72,10 @@ export default class Player {
     }
     reducePlayerHealth(): void {
         this.playerCurrentHealth -= 1;
+        // @ts-ignore
         this.healthBar.width = (this.playerCurrentHealth / this.playerMaxHealth) * this.healthBar.initialWidth;
         if (this.playerCurrentHealth <= 0) {
-            alert("dead");
+            this.dead = true;
         }
     }
 }

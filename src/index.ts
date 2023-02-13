@@ -5,7 +5,6 @@ import { gameOptions } from "./gameConfig";
 import { Application } from "pixi.js";
 
 const app = new Application(gameOptions);
-
 window.onload = async (): Promise<void> => {
     await loadGameAssets();
 
@@ -14,6 +13,9 @@ window.onload = async (): Promise<void> => {
     resizeCanvas();
 
     new Game(app);
+
+    startGame();
+
 };
 
 async function loadGameAssets(): Promise<void> {
@@ -41,3 +43,12 @@ function resizeCanvas(): void {
 
     window.addEventListener("resize", resize);
 }
+
+function startGame(): void{
+    const start = () => {
+        app.gameStarted = true;
+    };
+
+    document.addEventListener("click",start);
+}
+
