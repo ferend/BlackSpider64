@@ -29,6 +29,7 @@
         "pixi-spine": "^3.0.16",
         "pixi.js": "^6.5.8",
         "regenerator-runtime": "^0.13.10",
+        "save": "^2.9.0",
         "victor": "^1.1.0"
     },
     "devDependencies": {
@@ -36,6 +37,7 @@
         "@types/jest": "^29.2.0",
         "@types/node": "^18.11.7",
         "@types/offscreencanvas": "^2019.7.0",
+        "@types/victor": "^1.1.0",
         "@typescript-eslint/eslint-plugin": "^5.41.0",
         "@typescript-eslint/parser": "^5.41.0",
         "browserslist": "^4.21.4",

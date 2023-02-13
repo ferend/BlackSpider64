@@ -8,17 +8,20 @@ export default class Enemy {
     enemyGraphics: PIXI.Graphics;
     enemySpeed: number;
     player: Player;
+    attacking: boolean;
+    attackInterval: any;
     constructor(app: Application, player: Player) {
         this.app = app;
         this.player = player;
         this.enemyGraphics = new PIXI.Graphics();
-        this.enemySpeed = 1;
+        this.enemySpeed = 3;
+        this.attacking = false;
         this.spawnEnemies();
     }
 
     spawnEnemies(): void {
-        let r = this.randomSpawnPoint();
-        let enemyRad = 16;
+        const r = this.randomSpawnPoint();
+        const enemyRad = 16;
         this.enemyGraphics.position.set(r.x, r.y);
         this.enemyGraphics.beginFill(0xff0000, 1);
         this.enemyGraphics.drawCircle(0, 0, enemyRad);
@@ -27,8 +30,8 @@ export default class Enemy {
     }
 
     randomSpawnPoint(): Victor {
-        let edge = Math.floor(Math.random() * 4);
-        let spawnPoint = new Victor(0, 0);
+        const edge = Math.floor(Math.random() * 4);
+        const spawnPoint = new Victor(0, 0);
         switch (edge) {
             case 0: // TOP
                 spawnPoint.x = this.app.screen.width * Math.random();
@@ -50,20 +53,28 @@ export default class Enemy {
     }
 
     moveEnemies(): void {
-        let e = new Victor(this.enemyGraphics.position.x, this.enemyGraphics.position.y);
-        let s = new Victor(this.player.playerSprite.position.x, this.player.playerSprite.position.y);
+        const e = new Victor(this.enemyGraphics.position.x, this.enemyGraphics.position.y);
+        const s = new Victor(this.player.playerSprite.position.x, this.player.playerSprite.position.y);
         if (e.distance(s) < this.player.playerSprite.width / 2) {
-            let r = this.randomSpawnPoint();
-            this.enemyGraphics.position.set(r.x, r.y);
+            // let r = this.randomSpawnPoint();
+            // this.enemyGraphics.position.set(r.x, r.y);
+            this.attackPlayer();
             return;
         }
-        let d = s.subtract(e);
-        let v = d.normalize().multiplyScalar(this.enemySpeed);
+        const d = s.subtract(e);
+        const v = d.normalize().multiplyScalar(this.enemySpeed);
         this.enemyGraphics.position.set(this.enemyGraphics.position.x + v.x, this.enemyGraphics.position.y + v.y);
+    }
+
+    attackPlayer(): void {
+        if (this.attacking) return;
+        this.attacking = true;
+        this.attackInterval = setInterval(() => this.player.reducePlayerHealth(),500);
     }
 
     kill(): void {
         this.app.stage.removeChild(this.enemyGraphics);
+        clearInterval(this.attackInterval);
     }
 
     get position(): any {
