@@ -49,5 +49,5 @@ function startGame(): void {
         app.gameStarted = true;
     };
 
-    document.addEventListener("click", start);
+    document.addEventListener("pointerdown", start);
 }

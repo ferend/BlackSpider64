@@ -1,7 +1,5 @@
-import { Vector2 } from "pixi-spine";
 import * as PIXI from "pixi.js";
 import { Application } from "pixi.js";
-import Victor from "victor";
 import Player from "./models/player";
 import Enemy from "./models/enemy";
 import Spawner from "./helpers/spawner";
@@ -13,6 +11,7 @@ export default class Game {
     //enemy: Enemy;
     spawner: Spawner;
     restartButton: PIXI.Text;
+    scoreText: PIXI.Text;
 
     constructor(app: Application) {
         //Game.Instance = this;
@@ -31,6 +30,9 @@ export default class Game {
         this.app.gameStarted = false;
         this.addBackground();
 
+        this.scoreText = this.scoreTextLogic();
+        this.app.stage.addChild(this.scoreText);
+
         this.app.ticker.add((delta) => {
             gameOverScene.visible = this.player.dead;
             gameStartScene.visible = !this.app.gameStarted;
@@ -40,6 +42,7 @@ export default class Game {
                 value.moveEnemies();
             });
             this.bulletHit(this.player.shooting.bullets, this.spawner.spawns, 10, 16);
+            this.player.updateScoreText(this.scoreText);
         });
     }
 
@@ -69,7 +72,6 @@ export default class Game {
             strokeThickness: 4,
             dropShadow: true,
             dropShadowColor: "#000000",
-
         });
         text.style.fill = 0x24012b;
         text.x = this.app.screen.width / 2;
@@ -109,12 +111,29 @@ export default class Game {
 
         restartText.on("pointerdown", () => {
             this.app.gameStarted = true;
-            this.player.dead = false;
             this.player.playerCurrentHealth = this.player.playerMaxHealth;
+            this.player.score = 0;
             this.spawner.spawns.forEach(function (value) {
                 value.kill();
             });
+            this.player.dead = false;
         });
         return restartText;
+    }
+
+    scoreTextLogic(): PIXI.Text {
+        const scoreText = new PIXI.Text("Score: " + this.player.score);
+        scoreText.anchor.set(0.5);
+        scoreText.position.set(this.app.screen.width / 2, this.app.screen.height - 150);
+        scoreText.style = new PIXI.TextStyle({
+            fontFamily: "Arial",
+            fontSize: 40,
+            fill: "white",
+            stroke: "#ff3300",
+            strokeThickness: 4,
+            dropShadow: true,
+            dropShadowColor: "#000000",
+        });
+        return scoreText;
     }
 }

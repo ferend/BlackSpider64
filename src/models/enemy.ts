@@ -74,6 +74,8 @@ export default class Enemy {
     kill(): void {
         this.app.stage.removeChild(this.enemyGraphics);
         clearInterval(this.attackInterval);
+        if (this.player.dead) return;
+        this.player.increasePlayerScore();
     }
 
     get position(): any {

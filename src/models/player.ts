@@ -14,6 +14,7 @@ export default class Player {
     playerMaxHealth: number;
     playerCurrentHealth: number;
     dead: boolean;
+    score: number;
     constructor(app: Application) {
         this.app = app;
         this.playerSprite = new PIXI.Sprite(PIXI.Texture.from("Idle.png"));
@@ -24,6 +25,7 @@ export default class Player {
         this.lastMouseButton = 0;
         this.dead = false;
         this.rotation = 0;
+        this.score = 0;
         this.createPlayerHealthBar();
     }
 
@@ -85,5 +87,11 @@ export default class Player {
         if (this.playerCurrentHealth <= 0) {
             this.dead = true;
         }
+    }
+    increasePlayerScore(): void {
+        this.score += 1;
+    }
+    updateScoreText(scoreText: PIXI.Text): string {
+        return (scoreText.text = `Score: ${this.score}`);
     }
 }
