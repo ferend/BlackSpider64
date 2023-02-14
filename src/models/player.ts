@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as PIXI from "pixi.js";
 import { Application, Sprite } from "pixi.js";
 import Shooting from "../actions/shooting";
+import { Constants } from "../helpers/Constants";
 
 export default class Player {
     app: Application;

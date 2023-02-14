@@ -12,25 +12,29 @@ export default class Game {
     player: Player;
     //enemy: Enemy;
     spawner: Spawner;
+    restartButton: PIXI.Text;
 
     constructor(app: Application) {
         //Game.Instance = this;
         this.app = app;
         this.player = new Player(app);
         //this.enemy = new Enemy(app, this.player);
-        this.spawner = new Spawner(this.app,() => new Enemy(this.app, this.player));
-
+        this.spawner = new Spawner(this.app, () => new Enemy(this.app, this.player));
         this.player.addPlayer();
 
-        let gameStartScene = this.createScene("Click to Start");
-        let gameOverScene = this.createScene("Game Over");
+        const gameStartScene = this.createScene("BlackSpider\n\nClick to Start");
+        const gameOverScene = this.createScene("Game Over");
+
+        this.restartButton = this.restartButtonLogic();
+        gameOverScene.addChild(this.restartButton);
+
         this.app.gameStarted = false;
         this.addBackground();
 
         this.app.ticker.add((delta) => {
             gameOverScene.visible = this.player.dead;
             gameStartScene.visible = !this.app.gameStarted;
-            if(this.app.gameStarted === false) return;
+            if (this.app.gameStarted === false) return;
             this.player.playerMouseEvents();
             this.spawner.spawns.forEach(function (value) {
                 value.moveEnemies();
@@ -42,9 +46,9 @@ export default class Game {
     bulletHit(bullets: Array<any>, enemies: Array<Enemy>, bulletRadius: number, enemyRadius: number): void {
         bullets.forEach((bullet) => {
             enemies.forEach((enemy, index) => {
-                let distanceX = enemy.enemyGraphics.position.x - bullet.position.x;
-                let distanceY = enemy.enemyGraphics.position.y - bullet.position.y;
-                let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                const distanceX = enemy.enemyGraphics.position.x - bullet.position.x;
+                const distanceY = enemy.enemyGraphics.position.y - bullet.position.y;
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
                 if (distance < bulletRadius + enemyRadius) {
                     // Add to radiuses to calculate interference and distance
                     enemies.splice(index, 1);
@@ -56,10 +60,21 @@ export default class Game {
     createScene(sceneText: any): PIXI.Container {
         const sceneContainer = new PIXI.Container();
         const text = new PIXI.Text(sceneText);
-        text.style.fill = 0x00FF00;
+        text.style = new PIXI.TextStyle({
+            fontFamily: "Arial",
+            fontSize: 40,
+            align: "center",
+            fill: "white",
+            stroke: "#ff3300",
+            strokeThickness: 4,
+            dropShadow: true,
+            dropShadowColor: "#000000",
+
+        });
+        text.style.fill = 0x24012b;
         text.x = this.app.screen.width / 2;
-        text.y = 0;
-        text.anchor.set(0.5,0);
+        text.y = this.app.screen.height - 700;
+        text.anchor.set(0.5, 0);
         sceneContainer.zIndex = 1;
         sceneContainer.addChild(text);
         this.app.stage.addChild(sceneContainer);
@@ -72,5 +87,34 @@ export default class Game {
         background.height = this.app.screen.height;
         background.zIndex = -2;
         this.app.stage.addChild(background);
+    }
+
+    restartButtonLogic(): PIXI.Text {
+        const restartText = new PIXI.Text("Restart");
+
+        restartText.anchor.set(0.5);
+        restartText.position.set(this.app.screen.width / 2, this.app.screen.height - 100);
+        restartText.interactive = true;
+        restartText.buttonMode = true;
+
+        restartText.style = new PIXI.TextStyle({
+            fontFamily: "Arial",
+            fontSize: 40,
+            fill: "white",
+            stroke: "#ff3300",
+            strokeThickness: 4,
+            dropShadow: true,
+            dropShadowColor: "#000000",
+        });
+
+        restartText.on("pointerdown", () => {
+            this.app.gameStarted = true;
+            this.player.dead = false;
+            this.player.playerCurrentHealth = this.player.playerMaxHealth;
+            this.spawner.spawns.forEach(function (value) {
+                value.kill();
+            });
+        });
+        return restartText;
     }
 }

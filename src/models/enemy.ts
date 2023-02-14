@@ -2,6 +2,7 @@ import { Application } from "pixi.js";
 import * as PIXI from "pixi.js";
 import Victor from "victor";
 import Player from "./player";
+import { Constants } from "../helpers/Constants";
 
 export default class Enemy {
     app: Application;
@@ -10,11 +11,12 @@ export default class Enemy {
     player: Player;
     attacking: boolean;
     attackInterval: any;
+
     constructor(app: Application, player: Player) {
         this.app = app;
         this.player = player;
         this.enemyGraphics = new PIXI.Sprite(PIXI.Texture.from("HeroKnight_Idle_4.png"));
-        this.enemySpeed = 3;
+        this.enemySpeed = Constants.speedOfEnemies;
         this.attacking = false;
         this.spawnEnemies();
     }
@@ -66,7 +68,7 @@ export default class Enemy {
     attackPlayer(): void {
         if (this.attacking) return;
         this.attacking = true;
-        this.attackInterval = setInterval(() => this.player.reducePlayerHealth(),500);
+        this.attackInterval = setInterval(() => this.player.reducePlayerHealth(), 400);
     }
 
     kill(): void {

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { Application } from "pixi.js";
 import Player from "../models/player";
 import * as PIXI from "pixi.js";

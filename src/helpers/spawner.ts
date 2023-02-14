@@ -1,4 +1,5 @@
 import { Application } from "pixi.js";
+import { Constants } from "../helpers/Constants";
 
 export default class Spawner {
     spawnInterval: number;
@@ -9,16 +10,16 @@ export default class Spawner {
     constructor(app: Application, element: Function) {
         this.app = app;
         this.spawnInterval = 1000;
-        this.maxSpawn = 3;
+        this.maxSpawn = Constants.maxNumberOfEnemies;
         this.element = element;
         this.spawns = [];
         setInterval(() => this.spawner(), this.spawnInterval);
     }
 
     spawner(): void {
-        if(this.app.gameStarted === false) return;
+        if (this.app.gameStarted === false) return;
         if (this.spawns.length >= this.maxSpawn) return;
-        let s = this.element();
+        const s = this.element();
         this.spawns.push(s);
     }
 }
