@@ -1,10 +1,11 @@
 import * as PIXI from "pixi.js";
-import { Application } from "pixi.js";
+import { Application, Sprite } from "pixi.js";
 import Shooting from "../actions/shooting";
 
 export default class Player {
     app: Application;
     playerSprite: PIXI.Sprite;
+    rotation: number;
     shooting: Shooting;
     lastMouseButton: number;
     healthBar: PIXI.Graphics;
@@ -20,6 +21,7 @@ export default class Player {
         this.playerCurrentHealth = this.playerMaxHealth;
         this.lastMouseButton = 0;
         this.dead = false;
+        this.rotation = 0;
         this.createPlayerHealthBar();
     }
 
@@ -30,7 +32,7 @@ export default class Player {
     }
 
     playerMouseEvents(): void {
-        if(this.dead === true) return;
+        if (this.dead === true) return;
         const mouse = this.app.renderer.plugins.interaction.mouse;
         this.playerRotation(mouse);
         this.playerShooting(mouse);
@@ -41,7 +43,12 @@ export default class Player {
         const angle =
             Math.atan2(cursorPos.y - this.playerSprite.position.y, cursorPos.x - this.playerSprite.position.x) +
             Math.PI / 2;
-        this.playerSprite.rotation = angle;
+        this.rotation = angle;
+        if (angle < 0) {
+            this.playerSprite.scale.x = -1;
+        } else {
+            this.playerSprite.scale.x = 1;
+        }
     }
 
     playerShooting(mouse: any): void {
