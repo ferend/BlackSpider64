@@ -5,7 +5,7 @@ import Player from "./player";
 
 export default class Enemy {
     app: Application;
-    enemyGraphics: PIXI.Graphics;
+    enemyGraphics: PIXI.Sprite;
     enemySpeed: number;
     player: Player;
     attacking: boolean;
@@ -13,7 +13,7 @@ export default class Enemy {
     constructor(app: Application, player: Player) {
         this.app = app;
         this.player = player;
-        this.enemyGraphics = new PIXI.Graphics();
+        this.enemyGraphics = new PIXI.Sprite(PIXI.Texture.from("HeroKnight_Idle_4.png"));
         this.enemySpeed = 3;
         this.attacking = false;
         this.spawnEnemies();
@@ -21,11 +21,8 @@ export default class Enemy {
 
     spawnEnemies(): void {
         const r = this.randomSpawnPoint();
-        const enemyRad = 16;
+        this.enemyGraphics.anchor.set(0.5);
         this.enemyGraphics.position.set(r.x, r.y);
-        this.enemyGraphics.beginFill(0xff0000, 1);
-        this.enemyGraphics.drawCircle(0, 0, enemyRad);
-        this.enemyGraphics.endFill();
         this.app.stage.addChild(this.enemyGraphics);
     }
 

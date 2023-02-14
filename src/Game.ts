@@ -25,6 +25,7 @@ export default class Game {
         let gameStartScene = this.createScene("Click to Start");
         let gameOverScene = this.createScene("Game Over");
         this.app.gameStarted = false;
+        this.addBackground();
 
         this.app.ticker.add((delta) => {
             gameOverScene.visible = this.player.dead;
@@ -34,7 +35,7 @@ export default class Game {
             this.spawner.spawns.forEach(function (value) {
                 value.moveEnemies();
             });
-            this.bulletHit(this.player.shooting.bullets, this.spawner.spawns, 8, 16);
+            this.bulletHit(this.player.shooting.bullets, this.spawner.spawns, 10, 16);
         });
     }
 
@@ -65,4 +66,11 @@ export default class Game {
         return sceneContainer;
     }
 
+    addBackground(): void {
+        const background = new PIXI.Sprite(PIXI.Texture.from("bg.jpg"));
+        background.width = this.app.screen.width;
+        background.height = this.app.screen.height;
+        background.zIndex = -2;
+        this.app.stage.addChild(background);
+    }
 }

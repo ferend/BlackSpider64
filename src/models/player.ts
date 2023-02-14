@@ -13,7 +13,7 @@ export default class Player {
     dead: boolean;
     constructor(app: Application) {
         this.app = app;
-        this.playerSprite = new PIXI.Sprite(PIXI.Texture.WHITE);
+        this.playerSprite = new PIXI.Sprite(PIXI.Texture.from("Idle.png"));
         this.healthBar = new PIXI.Graphics();
         this.shooting = new Shooting(app, this);
         this.playerMaxHealth = 100;
@@ -26,7 +26,6 @@ export default class Player {
     addPlayer(): void {
         this.playerSprite.anchor.set(0.5);
         this.playerSprite.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
-        this.playerSprite.width = this.playerSprite.height = 32;
         this.app.stage.addChild(this.playerSprite);
     }
 

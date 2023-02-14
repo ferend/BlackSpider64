@@ -15,12 +15,12 @@ window.onload = async (): Promise<void> => {
     new Game(app);
 
     startGame();
-
 };
 
 async function loadGameAssets(): Promise<void> {
     return new Promise((res, rej) => {
         const loader = PIXI.Loader.shared;
+        loader.add("sprites", "./assets/player/spritesheet.json");
 
         loader.onComplete.once(() => {
             res();
@@ -44,11 +44,10 @@ function resizeCanvas(): void {
     window.addEventListener("resize", resize);
 }
 
-function startGame(): void{
+function startGame(): void {
     const start = () => {
         app.gameStarted = true;
     };
 
-    document.addEventListener("click",start);
+    document.addEventListener("click", start);
 }
-
