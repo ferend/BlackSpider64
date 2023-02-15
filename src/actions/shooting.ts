@@ -58,18 +58,20 @@ export default class Shooting {
     }
 
     bulletAnimatedSprite(): PIXI.AnimatedSprite {
-        const bulletAnim = new PIXI.AnimatedSprite([
-            PIXI.Texture.from("Dark VFX 1 (40x32)1.png"),
-            PIXI.Texture.from("Dark VFX 1 (40x32)2.png"),
-            PIXI.Texture.from("Dark VFX 1 (40x32)3.png"),
-            PIXI.Texture.from("Dark VFX 1 (40x32)4.png"),
-            PIXI.Texture.from("Dark VFX 1 (40x32)5.png"),
-            PIXI.Texture.from("Dark VFX 1 (40x32)6.png"),
-            PIXI.Texture.from("Dark VFX 1 (40x32)7.png"),
-        ]);
+        const bulletAnim = new PIXI.AnimatedSprite(
+            [
+                PIXI.Texture.from("Dark VFX 1 (40x32)1.png"),
+                PIXI.Texture.from("Dark VFX 1 (40x32)2.png"),
+                PIXI.Texture.from("Dark VFX 1 (40x32)3.png"),
+                PIXI.Texture.from("Dark VFX 1 (40x32)4.png"),
+                PIXI.Texture.from("Dark VFX 1 (40x32)5.png"),
+                PIXI.Texture.from("Dark VFX 1 (40x32)6.png"),
+                PIXI.Texture.from("Dark VFX 1 (40x32)7.png"),
+            ],
+            true,
+        );
         bulletAnim.animationSpeed = 0.1;
         bulletAnim.play();
-        bulletAnim.loop = true;
         bulletAnim.anchor.set(0.5);
         bulletAnim.scale.set(1.5);
         return bulletAnim;

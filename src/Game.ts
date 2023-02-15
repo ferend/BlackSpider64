@@ -56,9 +56,30 @@ export default class Game {
                     // Add to radiuses to calculate interference and distance
                     enemies.splice(index, 1);
                     enemy.kill();
+                    this.destroyBullet(bullet);
                 }
             });
         });
+    }
+
+    destroyBullet(bullet: any): void {
+        const bulletAnim = new PIXI.AnimatedSprite([
+            PIXI.Texture.from("Dark VFX 1 (40x32)11.png"),
+            PIXI.Texture.from("Dark VFX 1 (40x32)12.png"),
+            PIXI.Texture.from("Dark VFX 1 (40x32)13.png"),
+            PIXI.Texture.from("Dark VFX 1 (40x32)14.png"),
+            PIXI.Texture.from("Dark VFX 1 (40x32)15.png"),
+        ]);
+        bulletAnim.loop = false;
+        bulletAnim.animationSpeed = 0.1;
+        bulletAnim.anchor.set(0.5);
+        bulletAnim.scale.set(1.5);
+        bulletAnim.position.set(bullet.position.x, bullet.position.y);
+        this.app.stage.addChild(bulletAnim);
+        bulletAnim.play();
+        bulletAnim.onComplete = () => {
+            this.app.stage.removeChild(bulletAnim);
+        };
     }
     createScene(sceneText: any): PIXI.Container {
         const sceneContainer = new PIXI.Container();
