@@ -21,6 +21,7 @@ async function loadGameAssets(): Promise<void> {
     return new Promise((res, rej) => {
         const loader = PIXI.Loader.shared;
         loader.add("sprites", "./assets/player/spritesheet.json");
+        loader.add("sprites2", "./assets/player/vfx.json");
 
         loader.onComplete.once(() => {
             res();
