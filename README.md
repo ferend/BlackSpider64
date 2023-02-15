@@ -1,2 +1,5 @@
 # BlackSpider64
-Shooter game created with PixiJS and Typescript.
+
+## Shooter game created using PixiJS and Typescript.
+
+Name generated randomly using: https://videogamena.me/
