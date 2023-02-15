@@ -6,7 +6,7 @@ import { Constants } from "../helpers/Constants";
 
 export default class Enemy {
     app: Application;
-    enemyGraphics: PIXI.Sprite;
+    enemyGraphics: any;
     enemySpeed: number;
     player: Player;
     attacking: boolean;
@@ -15,18 +15,18 @@ export default class Enemy {
     constructor(app: Application, player: Player) {
         this.app = app;
         this.player = player;
-        this.enemyGraphics = new PIXI.Sprite(PIXI.Texture.from("HeroKnight_Idle_4.png"));
+        this.enemyGraphics = this.playerAnimatedSprite();
         this.enemySpeed = Constants.speedOfEnemies;
         this.attacking = false;
         this.spawnEnemies();
     }
-
     spawnEnemies(): void {
         const r = this.randomSpawnPoint();
         this.enemyGraphics.anchor.set(0.5);
         this.enemyGraphics.position.set(r.x, r.y);
         this.app.stage.addChild(this.enemyGraphics);
     }
+
 
     randomSpawnPoint(): Victor {
         const edge = Math.floor(Math.random() * 4);
@@ -69,6 +69,7 @@ export default class Enemy {
         if (this.attacking) return;
         this.attacking = true;
         this.attackInterval = setInterval(() => this.player.reducePlayerHealth(), 400);
+        this.enemyGraphics.stop();
     }
 
     kill(): void {
@@ -80,5 +81,27 @@ export default class Enemy {
 
     get position(): any {
         return this.enemyGraphics.position;
+    }
+
+    playerAnimatedSprite(): PIXI.AnimatedSprite {
+        const playerAnim = new PIXI.AnimatedSprite(
+            [
+                PIXI.Texture.from("HeroKnight_Run_0.png"),
+                PIXI.Texture.from("HeroKnight_Run_1.png"),
+                PIXI.Texture.from("HeroKnight_Run_2.png"),
+                PIXI.Texture.from("HeroKnight_Run_3.png"),
+                PIXI.Texture.from("HeroKnight_Run_4.png"),
+                PIXI.Texture.from("HeroKnight_Run_5.png"),
+                PIXI.Texture.from("HeroKnight_Run_6.png"),
+                PIXI.Texture.from("HeroKnight_Run_7.png"),
+                PIXI.Texture.from("HeroKnight_Run_8.png"),
+                PIXI.Texture.from("HeroKnight_Run_9.png"),
+            ],
+            true,
+        );
+        playerAnim.animationSpeed = 0.2;
+        playerAnim.play();
+        playerAnim.anchor.set(0.5);
+        return playerAnim;
     }
 }

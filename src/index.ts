@@ -22,7 +22,7 @@ async function loadGameAssets(): Promise<void> {
         const loader = PIXI.Loader.shared;
         loader.add("sprites", "./assets/player/spritesheet.json");
         loader.add("sprites2", "./assets/player/vfx.json");
-
+        loader.add("sprites3", "./assets/enemy/hero.json");
         loader.onComplete.once(() => {
             res();
         });
