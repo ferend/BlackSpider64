@@ -1,7 +1,7 @@
 {
-    "name": "pixi-typescript-boilerplate",
+    "name": "BlackSpider64",
     "version": "1.0.0",
-    "description": "pixi.js typescript boilerplate webpack",
+    "description": "Shooter game with pixi and typescript",
     "browserslist": "> 0.25%, not dead",
     "scripts": {
         "webpack": "webpack",
@@ -22,7 +22,7 @@
         "code-style-check": "npm run lint-check && npm run prettier:check",
         "prepare": "husky install"
     },
-    "author": "jkanchelov",
+    "author": "ferend",
     "license": "MIT",
     "dependencies": {
         "core-js": "^3.26.0",
