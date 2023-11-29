@@ -50,6 +50,7 @@ export default class Shooting {
         bullet.position.set(this.player.playerSprite.position.x, this.player.playerSprite.position.y);
         bullet.endFill();
         const angle = this.player.rotation - Math.PI / 2;
+
         bullet.velocity = new Victor(Math.cos(angle), Math.sin(angle)).multiplyScalar(this.bulletSpeed);
         this.bullets.push(bullet);
         bullet.isSprite = true;

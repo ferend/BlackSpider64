@@ -5,19 +5,17 @@ import Enemy from "./models/enemy";
 import Spawner from "./helpers/spawner";
 
 export default class Game {
-    //static Instance: Game;
     app: Application;
     player: Player;
     //enemy: Enemy;
     spawner: Spawner;
     restartButton: PIXI.Text;
     scoreText: PIXI.Text;
+    mouse: PIXI.Point;
 
     constructor(app: Application) {
-        //Game.Instance = this;
         this.app = app;
         this.player = new Player(app);
-        //this.enemy = new Enemy(app, this.player);
         this.spawner = new Spawner(this.app, () => new Enemy(this.app, this.player));
         this.player.addPlayer();
 
@@ -32,12 +30,24 @@ export default class Game {
 
         this.scoreText = this.scoreTextLogic();
         this.app.stage.addChild(this.scoreText);
+        this.app.stage.interactive = true;
+
+        this.mouse = new PIXI.Point(0, 0);
+
+        app.stage.on("pointertap", (event: PIXI.InteractionEvent) => {
+            this.mouse = event.data.global;
+        });
 
         this.app.ticker.add((delta) => {
             gameOverScene.visible = this.player.dead;
             gameStartScene.visible = !this.app.gameStarted;
+
             if (this.app.gameStarted === false) return;
-            this.player.playerMouseEvents();
+
+            if (this.mouse != null) {
+                this.player.playerMouseEvents(this.mouse);
+            }
+
             this.spawner.spawns.forEach(function (value) {
                 value.moveEnemies();
             });

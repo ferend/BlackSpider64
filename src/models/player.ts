@@ -35,15 +35,14 @@ export default class Player {
         this.app.stage.addChild(this.playerSprite);
     }
 
-    playerMouseEvents(): void {
+    playerMouseEvents(mouse: any): void {
         if (this.dead === true) return;
-        const mouse = this.app.renderer.plugins.interaction.mouse;
         this.playerRotation(mouse);
         this.playerShooting(mouse);
     }
 
     playerRotation(mouse: any): void {
-        const cursorPos = mouse.global;
+        const cursorPos = mouse;
         const angle =
             Math.atan2(cursorPos.y - this.playerSprite.position.y, cursorPos.x - this.playerSprite.position.x) +
             Math.PI / 2;
@@ -66,12 +65,10 @@ export default class Player {
         const margin = 16;
         const barHeight = 8;
         this.healthBar.beginFill(0xff0000);
-        // @ts-ignore
         this.healthBar.initialWidth = this.app.screen.width - 2 * margin;
         this.healthBar.drawRect(
             margin,
             this.app.screen.height - barHeight - margin / 2,
-            // @ts-ignore
             this.healthBar.initialWidth,
             barHeight,
         );
@@ -82,7 +79,6 @@ export default class Player {
     }
     reducePlayerHealth(): void {
         this.playerCurrentHealth -= 1;
-        // @ts-ignore
         this.healthBar.width = (this.playerCurrentHealth / this.playerMaxHealth) * this.healthBar.initialWidth;
         if (this.playerCurrentHealth <= 0) {
             this.dead = true;
